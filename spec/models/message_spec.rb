@@ -1,38 +1,47 @@
 require 'rails_helper'
 
 RSpec.describe Message, type: :model do
-  describe '#create' do
-    context 'can save' do
-      it 'is valid with content' do
-        expect(build(:message, image: nil)).to be_valid
+  describe 'メッセージ送信機能' do
+    
+    before do
+      #messageを作成する
+      @message = build(:message)
+    end
+    
+    describe '保存成功（正常系）' do
+      it 'contentが存在すれば、imageがなくても保存できる' do
+        @message.image = nil
+        expect(@message).to be_valid  
       end
 
-      it 'is valid with image' do
-        expect(build(:message, content: nil)).to be_valid
+      it 'imageが存在すれば、contentがなくても保存できる' do
+        @message.content = nil
+        expect(@message).to be_valid
       end
 
-      it 'is valid with content and image' do
-        expect(build(:message)).to be_valid
+      it 'contentとimageが両方あれば保存ができる' do
+        expect(@message).to be_valid
       end
     end
 
-    context 'can not save' do
-      it 'is invalid without content and image' do
-        message = build(:message, content: nil, image: nil)
-        message.valid?
-        expect(message.errors[:content]).to include("を入力してください")
+    describe '保存失敗（異常系）' do
+      it 'contentとimageが両方空だと保存できない' do
+        @message.content = nil
+        @message.image = nil
+        @message.valid?
+        expect(@message.errors.full_messages).to include("Content can't be blank")
       end
 
-      it 'is invalid without group_id' do
-        message = build(:message, group_id: nil)
-        message.valid?
-        expect(message.errors[:group]).to include("を入力してください")
+      it 'groupの情報なければ保存できない' do
+        @message.group = nil
+        @message.valid?
+        expect(@message.errors.full_messages).to include("Group must exist")
       end
 
-      it 'is invaid without user_id' do
-        message = build(:message, user_id: nil)
-        message.valid?
-        expect(message.errors[:user]).to include("を入力してください")
+      it 'userの情報がなければ保存できない' do
+        @message.user = nil
+        @message.valid?
+        expect(@message.errors.full_messages).to include("User must exist")
       end
     end
   end
