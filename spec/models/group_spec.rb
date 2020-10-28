@@ -22,7 +22,7 @@ RSpec.describe Group, type: :model do
       it "nameが重複する場合登録出来ない" do
         @group.name = @resistrated_group.name
         @group.valid?
-        expect(@group.errors.full_messages).to include("Name has already been taken")  
+        expect(@group.errors.full_messages).to include("Name can't be blank")  
       end
     end
   end
