@@ -9,7 +9,7 @@ RSpec.describe Message, type: :model do
     end
     
     describe '保存成功（正常系）' do
-      it 'contentが存在すれば、imageがなくても保存できる' do
+      it 'contentが存在すれば、imageがなくても保存できる', problem3: true do
         @message.image = nil
         expect(@message).to be_valid  
       end
@@ -19,26 +19,26 @@ RSpec.describe Message, type: :model do
         expect(@message).to be_valid
       end
 
-      it 'contentとimageが両方あれば保存ができる' do
+      it 'contentとimageが両方あれば保存ができる', problem3: true do
         expect(@message).to be_valid
       end
     end
 
     describe '保存失敗（異常系）' do
-      it 'contentとimageが両方空だと保存できない' do
+      it 'contentとimageが両方空だと保存できない', problem3: true do
         @message.content = nil
         @message.image = nil
         @message.valid?
         expect(@message.errors.full_messages).to include("Content can't be blank")
       end
 
-      it 'groupの情報なければ保存できない' do
+      it 'groupの情報なければ保存できない', problem3: true do
         @message.group = nil
         @message.valid?
         expect(@message.errors.full_messages).to include("Group must exist")
       end
 
-      it 'userの情報がなければ保存できない' do
+      it 'userの情報がなければ保存できない', problem3: true do
         @message.user = nil
         @message.valid?
         expect(@message.errors.full_messages).to include("User must exist")
